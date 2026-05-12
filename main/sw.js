@@ -2,15 +2,15 @@ const CACHE_NAME = 'srig-v3-cache-v1';
 const ASSETS = [
   "/",
   "/index.html",
-  "/css/styles.css",
-  "/js/app.js",
-  "/js/websocket.js",
-  "/js/charts.js",
-  "/js/i18n.js",
-  "/manifest.json",
-  "/img/logo-srig.png",
-  "/img/light-theme.png",
-  "/img/dark-theme.png"
+  "/main/css/styles.css",
+  "/main/js/app.js",
+  "/main/js/websocket.js",
+  "/main/js/charts.js",
+  "/main/js/i18n.js",
+  "/main/manifest.json",
+  "/main/img/logo-srig.png",
+  "/main/img/light-theme.png",
+  "/main/img/dark-theme.png"
 ];
 
 self.addEventListener('install', event => {
