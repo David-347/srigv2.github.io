@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>SRIG v3 Maestro</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#121212" />
+  <meta name="theme-color" content="#1a73e8" />
   <link rel="manifest" href="/manifest.json" />
   <link rel="stylesheet" href="/css/styles.css" />
   <link rel="icon" href="/img/logo.png" />
@@ -21,113 +21,455 @@
   <script src="/js/app.js" defer></script>
 </head>
 <body class="theme-dark">
-  <header class="topbar">
-    <div class="topbar-left">
-      <img src="/img/logo.png" class="logo" alt="SRIG" />
-      <h1>SRIG v3</h1>
+<div class="page">
+
+<header>
+    <div class="left">
+        <img class="logo" src="/img/logo-srig.png" alt="Logo">
+        <div>
+            <div class="title" data-i18n="title">SRIG v3 – Sistema de Riego Inteligente</div>
+            <div class="subtitle" data-i18n="subtitle">Dashboard avanzado</div>
+        </div>
     </div>
-    <div class="topbar-right">
-      <button id="btn-theme" class="icon-btn">🌓</button>
-      <select id="lang-select">
-        <option value="es">ES</option>
-        <option value="en">EN</option>
-      </select>
-      <button id="btn-login" class="primary-btn" data-i18n="login">Iniciar sesión</button>
+
+    <div class="right">
+        <div>
+            <div><span data-i18n="uiTime">Hora UI</span>: <span id="localTimeUI">--:--:--</span></div>
+            <div><span data-i18n="devTime">Hora dispositivo</span>: <span id="deviceTime">--:--:--</span></div>
+        </div>
+
+        <div>
+            <span data-i18n="langLabel">Idioma</span>:
+            <span id="langToggle" class="lang-toggle-text">EN</span>
+        </div>
+
+        <div class="theme-toggle-img">
+            <img id="themeIcon" src="/img/light-theme.png" alt="Theme">
+        </div>
+
+        <div class="user-box" id="userBox">
+            <div class="user-name" id="userNameLabel">Guest</div>
+            <div class="avatar" id="avatar">G</div>
+        </div>
+
+        <div id="userMenuGuest" style="font-size:12px;">
+            <button class="outline" style="margin-top:0;" onclick="openLoginModal()" data-i18n="loginBtn">
+                Iniciar sesión
+            </button>
+        </div>
+
+        <div id="userMenuLogged" style="display:none; font-size:12px;">
+            <span id="userRoleLabel">viewer</span> ·
+            <button class="outline" style="margin-top:0;" onclick="logout()" data-i18n="logoutBtn">
+                Cerrar sesión
+            </button>
+        </div>
     </div>
-  </header>
+</header>
 
-  <nav class="tabs">
-    <button class="tab active" data-tab="dashboard" data-i18n="tab_dashboard">Dashboard</button>
-    <button class="tab" data-tab="zones" data-i18n="tab_zones">Zonas</button>
-    <button class="tab" data-tab="logs" data-i18n="tab_logs">Registros</button>
-    <button class="tab" data-tab="config" data-i18n="tab_config">Configuración</button>
-  </nav>
+<nav>
+    <button class="active" data-tab="home" data-i18n="tabHome">Home</button>
+    <button data-tab="auto" data-i18n="tabAuto">Automático</button>
+    <button data-tab="settings" data-i18n="tabSettings">Ajustes</button>
+    <button data-tab="admin" data-i18n="tabMaster">Master</button>
+</nav>
 
-  <main>
-    <section id="tab-dashboard" class="tab-content active">
-      <div class="cards-grid">
-        <div class="card">
-          <h2 data-i18n="card_flow">Flujo</h2>
-          <p><span id="flow-value">0.00</span> L/min</p>
-        </div>
-        <div class="card">
-          <h2 data-i18n="card_voltage">Voltaje</h2>
-          <p><span id="volt-value">0.00</span> V</p>
-        </div>
-        <div class="card">
-          <h2 data-i18n="card_humidity">Humedad suelo</h2>
-          <p><span id="hum-value">0.0</span> %</p>
-        </div>
-        <div class="card">
-          <h2 data-i18n="card_status">Estado</h2>
-          <p id="status-text">OK</p>
-        </div>
-      </div>
+<main>
 
-      <div class="charts-grid">
-        <div class="chart-card">
-          <h3 data-i18n="chart_flow">Histórico de flujo</h3>
-          <canvas id="chart-flow"></canvas>
-        </div>
-        <div class="chart-card">
-          <h3 data-i18n="chart_humidity">Histórico de humedad</h3>
-          <canvas id="chart-hum"></canvas>
-        </div>
-      </div>
-    </section>
+<!-- HOME -->
+<section id="home" class="tab active">
 
-    <section id="tab-zones" class="tab-content">
-      <h2 data-i18n="zones_title">Control de zonas</h2>
-      <div class="zones-grid">
-        <div class="zone-card">
-          <h3>Z1</h3>
-          <p data-i18n="zone_state">Estado: </p><span id="z1-state">OFF</span>
-          <div class="zone-actions">
-            <button id="z1-on" class="primary-btn" data-i18n="btn_on">Encender</button>
-            <button id="z1-off" class="secondary-btn" data-i18n="btn_off">Apagar</button>
-          </div>
+    <div class="card">
+        <h2 data-i18n="helpHomeTitle">Bienvenido</h2>
+        <div class="muted" data-i18n="helpHomeText">
+            Home siempre está disponible. Desde aquí ves el estado general, flujo y activación manual por zona.
         </div>
-        <div class="zone-card">
-          <h3>Z2</h3>
-          <p data-i18n="zone_state">Estado: </p><span id="z2-state">OFF</span>
-          <div class="zone-actions">
-            <button id="z2-on" class="primary-btn" data-i18n="btn_on">Encender</button>
-            <button id="z2-off" class="secondary-btn" data-i18n="btn_off">Apagar</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="tab-logs" class="tab-content">
-      <h2 data-i18n="logs_title">Registros</h2>
-      <div id="logs-container" class="logs"></div>
-    </section>
-
-    <section id="tab-config" class="tab-content">
-      <h2 data-i18n="config_title">Configuración</h2>
-      <div class="config-grid">
-        <div class="config-card">
-          <h3 data-i18n="config_hum">Umbrales de humedad</h3>
-          <label>Min: <input type="number" id="hum-min" value="30" /></label>
-          <label>Max: <input type="number" id="hum-max" value="40" /></label>
-          <button id="save-hum" class="primary-btn" data-i18n="btn_save">Guardar</button>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <div id="login-modal" class="modal hidden">
-    <div class="modal-content">
-      <h2 data-i18n="login_title">Iniciar sesión</h2>
-      <label data-i18n="login_user">Usuario</label>
-      <input type="text" id="login-user" />
-      <label data-i18n="login_pass">Contraseña</label>
-      <input type="password" id="login-pass" />
-      <div class="modal-actions">
-        <button id="login-cancel" class="secondary-btn" data-i18n="btn_cancel">Cancelar</button>
-        <button id="login-ok" class="primary-btn" data-i18n="btn_login">Entrar</button>
-      </div>
     </div>
-  </div>
+
+    <div class="grid-2">
+
+        <div class="card">
+            <h2 data-i18n="generalIndicators">Indicadores generales</h2>
+
+            <h3 data-i18n="zone1">Zona 1</h3>
+            <select id="modeZ1" onchange="sendMode(1)">
+                <option value="manual" data-i18n="modeManual">Manual</option>
+                <option value="schedule" data-i18n="modeSchedule">Horario</option>
+                <option value="automatic" data-i18n="modeAuto">Automático</option>
+                <option value="humidity" data-i18n="modeHumidity">Humedad</option>
+            </select>
+
+            <h3 data-i18n="zone2">Zona 2</h3>
+            <select id="modeZ2" onchange="sendMode(2)">
+                <option value="manual" data-i18n="modeManual">Manual</option>
+                <option value="schedule" data-i18n="modeSchedule">Horario</option>
+                <option value="automatic" data-i18n="modeAuto">Automático</option>
+                <option value="humidity" data-i18n="modeHumidity">Humedad</option>
+            </select>
+
+            <hr>
+
+            <div class="indicator-row">
+                <span class="indicator-label" data-i18n="activeZone">Zona activa</span>
+                <span class="indicator-value" id="activeZone">Ninguna</span>
+            </div>
+
+            <div class="indicator-row">
+                <span class="indicator-label" data-i18n="state">Estado</span>
+                <span class="indicator-value" id="systemState">Idle</span>
+            </div>
+
+            <div class="indicator-row">
+                <span class="indicator-label" data-i18n="flowNow">Flujo actual</span>
+                <span class="indicator-value" id="flowValue">0 L/min</span>
+            </div>
+
+            <div class="indicator-row">
+                <span class="indicator-label" data-i18n="flowTotal">Flujo total</span>
+                <span class="indicator-value" id="flowTotal">0 L</span>
+            </div>
+
+            <div class="indicator-row">
+                <span class="indicator-label" data-i18n="avgHumidity">Humedad promedio</span>
+                <span class="indicator-value" id="avgHumidity">-- %</span>
+            </div>
+
+            <div class="indicator-row">
+                <span class="indicator-label" data-i18n="sensor1">Sensor 1</span>
+                <span class="indicator-value" id="sensor1Hum">-- %</span>
+            </div>
+
+            <div class="indicator-row">
+                <span class="indicator-label" data-i18n="sensor2">Sensor 2</span>
+                <span class="indicator-value" id="sensor2Hum">-- %</span>
+            </div>
+
+            <div class="indicator-row">
+                <span class="indicator-label" data-i18n="temperatureLabel">Temperatura</span>
+                <span class="indicator-value" id="temperature">-- °C</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 data-i18n="manualActivation">Activación manual</h2>
+            <div class="muted" data-i18n="helpManual">
+                El botón invierte el estado actual de la zona. El punto indica el estado real reportado por el ESP32.
+            </div>
+
+            <div class="push-row">
+                <button class="push-btn" id="btnZ1" onclick="toggleZone(1)" data-i18n="toggleZ1">Activar/Desactivar Zona 1</button>
+                <div class="state-dot" id="stateZ1"></div>
+            </div>
+
+            <div class="push-row">
+                <button class="push-btn" id="btnZ2" onclick="toggleZone(2)" data-i18n="toggleZ2">Activar/Desactivar Zona 2</button>
+                <div class="state-dot" id="stateZ2"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card">
+        <h2 data-i18n="flowChart">Flujo general</h2>
+        <div class="muted" data-i18n="helpFlow">
+            La gráfica siempre está visible. Los datos solo pintan la curva, no crean la gráfica.
+        </div>
+        <canvas id="flowCanvas"></canvas>
+    </div>
+
+    <div class="card">
+        <h2 data-i18n="activationChart">Activaciones por zona</h2>
+        <canvas id="activationCanvas"></canvas>
+    </div>
+
+</section>
+
+<!-- AUTOMÁTICO -->
+<section id="auto" class="tab">
+
+    <div class="card">
+        <h2 data-i18n="autoTitle">Automático (horario, humedad y clima)</h2>
+        <div class="muted" data-i18n="helpAuto">
+            El modo automático combina reglas de horario, humedad y clima. El modo horario y humedad también pueden usarse por separado.
+        </div>
+    </div>
+
+    <div class="grid-2">
+
+        <!-- HUMEDAD + CLIMA -->
+        <div class="card">
+            <h3 data-i18n="humidityControl">Control por humedad</h3>
+            <div class="muted" data-i18n="helpHumidity">
+                Cuando la humedad baja del mínimo, la zona puede activarse. La histéresis evita rebotes.
+            </div>
+
+            <label data-i18n="humMin">Mínimo (%)</label>
+            <input type="number" id="humMin" value="30">
+
+            <label data-i18n="humMax">Máximo (%)</label>
+            <input type="number" id="humMax" value="40">
+
+            <label data-i18n="hysteresis">Histéresis (%)</label>
+            <input type="number" id="hysteresis" value="8">
+
+            <button class="primary" onclick="saveHumidityConfig()" data-i18n="save">Guardar</button>
+
+            <hr>
+
+            <h3 data-i18n="weatherConfig">Clima (configuración automática)</h3>
+            <div class="muted" data-i18n="helpWeather">
+                El clima ajusta o inhibe el riego automático según lluvia, probabilidad y temperatura.
+            </div>
+
+            <label data-i18n="useWeather">Usar clima</label>
+            <label class="switch">
+                <input type="checkbox" id="weatherEnabled" onchange="saveWeatherConfig()">
+                <span class="slider"></span>
+            </label>
+
+            <label data-i18n="minRain">Lluvia mínima (mm)</label>
+            <input type="number" id="minRain" value="2">
+
+            <label data-i18n="minProb">Probabilidad mínima (%)</label>
+            <input type="number" id="minProb" value="60">
+
+            <label data-i18n="minTemp">Temperatura mínima (°C)</label>
+            <input type="number" id="minTemp" value="5">
+
+            <label data-i18n="maxTemp">Temperatura máxima (°C)</label>
+            <input type="number" id="maxTemp" value="40">
+
+            <button class="primary" onclick="saveWeatherConfig()" data-i18n="saveWeather">Guardar clima</button>
+
+            <h4 data-i18n="weatherState">Estado del clima</h4>
+
+            <div class="indicator-row">
+                <span class="indicator-label" data-i18n="rainNow">Lluvia actual</span>
+                <span class="indicator-value" id="rainNow">-- mm</span>
+            </div>
+
+            <div class="indicator-row">
+                <span class="indicator-label" data-i18n="rainProb">Probabilidad</span>
+                <span class="indicator-value" id="rainProb">-- %</span>
+            </div>
+
+            <div class="indicator-row">
+                <span class="indicator-label" data-i18n="tempNow">Temperatura</span>
+                <span class="indicator-value" id="tempNow">-- °C</span>
+            </div>
+        </div>
+
+        <!-- HORARIO -->
+        <div class="card">
+            <h3 data-i18n="schedulesTitle">Reglas de horario</h3>
+            <div class="muted" data-i18n="schedulesHint">
+                Cada zona tiene numeración independiente y nombres editables. Los cambios se envían al ESP32.
+            </div>
+
+            <h4 data-i18n="zone1">Zona 1</h4>
+            <div id="zone1Rules"></div>
+            <button class="outline" onclick="addRule(1)" data-i18n="addRule">Agregar regla</button>
+
+            <h4 data-i18n="zone2">Zona 2</h4>
+            <div id="zone2Rules"></div>
+            <button class="outline" onclick="addRule(2)" data-i18n="addRule">Agregar regla</button>
+
+            <button class="primary" onclick="sendAllSchedules()" data-i18n="sendSchedules">
+                Enviar reglas al ESP32
+            </button>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- AJUSTES -->
+<section id="settings" class="tab">
+
+    <div class="grid-2">
+
+        <!-- AJUSTES LOCALES -->
+        <div class="card">
+            <h2 data-i18n="localSettings">Ajustes locales</h2>
+            <div class="muted" data-i18n="helpLocalSettings">
+                Estos ajustes solo afectan esta interfaz en este navegador. No se envían al ESP32.
+            </div>
+
+            <label data-i18n="theme">Tema</label>
+            <select id="themeSelect" onchange="saveLocalSettings()">
+                <option value="light" data-i18n="themeLight">Claro</option>
+                <option value="dark" data-i18n="themeDark">Oscuro</option>
+            </select>
+
+            <label data-i18n="flowUnits">Unidades de flujo</label>
+            <select id="flowUnitSelect" onchange="saveLocalSettings()">
+                <option value="lmin">L/min</option>
+                <option value="gpm">GPM</option>
+            </select>
+        </div>
+
+        <!-- AJUSTES GENERALES -->
+        <div class="card">
+            <h2 data-i18n="generalSettings">Ajustes generales</h2>
+            <div class="muted" data-i18n="helpGeneralSettings">
+                Estos parámetros describen el sistema y pueden usarse como referencia para el ESP32.
+            </div>
+
+            <label data-i18n="systemName">Nombre del sistema</label>
+            <input type="text" id="systemName">
+
+            <label data-i18n="defaultIrrTime">Tiempo de riego por defecto (min)</label>
+            <input type="number" id="defaultIrrTime" value="10">
+
+            <label data-i18n="unitsSystem">Sistema de unidades</label>
+            <select id="unitsSystem">
+                <option value="metric">Métrico</option>
+                <option value="imperial">Imperial</option>
+            </select>
+
+            <button class="outline" onclick="downloadConfig()" data-i18n="downloadConfig">
+                Descargar configuración
+            </button>
+            <label data-i18n="uploadConfigLabel">Cargar configuración</label>
+            <input type="file" accept="application/json" onchange="uploadConfig(this.files[0])">
+        </div>
+
+    </div>
+
+    <div class="grid-2">
+
+        <!-- PERFIL DE USUARIO -->
+        <div class="card">
+            <h2 data-i18n="userProfile">Perfil de usuario</h2>
+
+            <label data-i18n="userName">Nombre</label>
+            <input type="text" id="profileName">
+
+            <label data-i18n="userImageFile">Imagen (avatar)</label>
+            <input type="file" accept="image/*" onchange="uploadAvatar(this.files[0])">
+
+            <label data-i18n="userPwd">Nueva contraseña</label>
+            <input type="password" id="profilePwd">
+
+            <label data-i18n="userPwdConfirm">Confirmar contraseña</label>
+            <input type="password" id="profilePwdConfirm">
+
+            <button class="primary" onclick="saveProfile()" data-i18n="saveProfile">
+                Guardar perfil
+            </button>
+
+            <div id="profileMsg" class="muted"></div>
+        </div>
+
+        <!-- ZONA HORARIA -->
+        <div class="card">
+            <h2 data-i18n="tzSettings">Zona horaria</h2>
+
+            <label data-i18n="tzOffset">Offset respecto a UTC</label>
+            <input type="number" id="tzOffset" value="-6">
+
+            <button class="primary" onclick="saveTimeSettings()" data-i18n="save">
+                Guardar
+            </button>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- MASTER -->
+<section id="admin" class="tab">
+
+    <div class="card">
+        <h2 data-i18n="masterTitle">Master / Administración</h2>
+        <div class="muted" data-i18n="masterWarning">
+            Sección sensible: usuarios, contraseñas y APIs. Solo disponible para rol admin.
+        </div>
+    </div>
+
+    <div class="grid-2">
+
+        <!-- USUARIOS -->
+        <div class="card">
+            <h3 data-i18n="users">Usuarios</h3>
+
+            <label data-i18n="newUser">Nuevo usuario</label>
+            <input type="text" id="newUser">
+
+            <label data-i18n="role">Rol</label>
+            <select id="newUserRole">
+                <option value="admin">Admin</option>
+                <option value="operator">Operator</option>
+                <option value="viewer">Viewer</option>
+            </select>
+
+            <button class="primary" onclick="createUser()" data-i18n="createUser">
+                Crear usuario
+            </button>
+        </div>
+
+        <!-- CAMBIO DE CONTRASEÑA -->
+        <div class="card">
+            <h3 data-i18n="changePwd">Cambio de contraseña</h3>
+
+            <label data-i18n="user">Usuario</label>
+            <input type="text" id="pwdUser">
+
+            <label data-i18n="newPwd">Contraseña nueva</label>
+            <input type="password" id="pwdNew">
+
+            <label data-i18n="confirmPwd">Confirmar contraseña</label>
+            <input type="password" id="pwdConfirm">
+
+            <button class="primary" onclick="changePassword()" data-i18n="changePwdBtn">
+                Cambiar contraseña
+            </button>
+
+            <div id="pwdMsg" class="muted"></div>
+        </div>
+
+    </div>
+
+    <!-- APIS -->
+    <div class="card">
+        <h3 data-i18n="apis">APIs</h3>
+
+        <label data-i18n="telegramToken">Token de Telegram Bot</label>
+        <input type="text" id="telegramToken">
+
+        <button class="primary" onclick="saveTelegramToken()" data-i18n="save">
+            Guardar
+        </button>
+    </div>
+
+</section>
+
+</main>
+
+<footer>
+    <span data-i18n="footerText">
+        SRIG v3 – Interfaz avanzada para ESP32 con Ethernet y microSD.
+    </span>
+</footer>
+
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal-overlay" style="display:none;">
+    <div class="modal">
+        <h2 data-i18n="loginTitle">Inicio de sesión</h2>
+
+        <label data-i18n="user">Usuario</label>
+        <input type="text" id="loginUserModal">
+
+        <label data-i18n="password">Contraseña</label>
+        <input type="password" id="loginPwdModal">
+
+        <div id="loginMsgModal" class="muted"></div>
+
+        <button class="primary" onclick="loginModalSubmit()" data-i18n="loginBtn">Iniciar sesión</button>
+        <button class="outline" onclick="closeLoginModal()" data-i18n="cancel">Cancelar</button>
+    </div>
+</div>
 </body>
 </html>
