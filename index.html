@@ -5,20 +5,20 @@
   <title>SRIG v3 Maestro</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#1a73e8" />
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="stylesheet" href="/css/styles.css" />
-  <link rel="icon" href="/img/logo.png" />
+  <link rel="manifest" href="/main/manifest.json" />
+  <link rel="stylesheet" href="/main/css/styles.css" />
+  <link rel="icon" href="/main/img/logo.png" />
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js');
+        navigator.serviceWorker.register('/main/sw.js');
       });
     }
   </script>
-  <script src="/js/i18n.js" defer></script>
-  <script src="/js/websocket.js" defer></script>
-  <script src="/js/charts.js" defer></script>
-  <script src="/js/app.js" defer></script>
+  <script src="/main/js/i18n.js" defer></script>
+  <script src="/main/js/websocket.js" defer></script>
+  <script src="/main/js/charts.js" defer></script>
+  <script src="/main/js/app.js" defer></script>
 </head>
 <body class="theme-dark">
 <div class="page">
@@ -44,7 +44,7 @@
         </div>
 
         <div class="theme-toggle-img">
-            <img id="themeIcon" src="/img/light-theme.png" alt="Theme">
+            <img id="themeIcon" src="/main/img/light-theme.png" alt="Theme">
         </div>
 
         <div class="user-box" id="userBox">
