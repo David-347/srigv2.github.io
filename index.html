@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>SRIG v3 Maestro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#121212" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="icon" href="/img/logo.png" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js');
+      });
+    }
+  </script>
+  <script src="/js/i18n.js" defer></script>
+  <script src="/js/websocket.js" defer></script>
+  <script src="/js/charts.js" defer></script>
+  <script src="/js/app.js" defer></script>
+</head>
+<body class="theme-dark">
+  <header class="topbar">
+    <div class="topbar-left">
+      <img src="/img/logo.png" class="logo" alt="SRIG" />
+      <h1>SRIG v3</h1>
+    </div>
+    <div class="topbar-right">
+      <button id="btn-theme" class="icon-btn">🌓</button>
+      <select id="lang-select">
+        <option value="es">ES</option>
+        <option value="en">EN</option>
+      </select>
+      <button id="btn-login" class="primary-btn" data-i18n="login">Iniciar sesión</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="dashboard" data-i18n="tab_dashboard">Dashboard</button>
+    <button class="tab" data-tab="zones" data-i18n="tab_zones">Zonas</button>
+    <button class="tab" data-tab="logs" data-i18n="tab_logs">Registros</button>
+    <button class="tab" data-tab="config" data-i18n="tab_config">Configuración</button>
+  </nav>
+
+  <main>
+    <section id="tab-dashboard" class="tab-content active">
+      <div class="cards-grid">
+        <div class="card">
+          <h2 data-i18n="card_flow">Flujo</h2>
+          <p><span id="flow-value">0.00</span> L/min</p>
+        </div>
+        <div class="card">
+          <h2 data-i18n="card_voltage">Voltaje</h2>
+          <p><span id="volt-value">0.00</span> V</p>
+        </div>
+        <div class="card">
+          <h2 data-i18n="card_humidity">Humedad suelo</h2>
+          <p><span id="hum-value">0.0</span> %</p>
+        </div>
+        <div class="card">
+          <h2 data-i18n="card_status">Estado</h2>
+          <p id="status-text">OK</p>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3 data-i18n="chart_flow">Histórico de flujo</h3>
+          <canvas id="chart-flow"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3 data-i18n="chart_humidity">Histórico de humedad</h3>
+          <canvas id="chart-hum"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-zones" class="tab-content">
+      <h2 data-i18n="zones_title">Control de zonas</h2>
+      <div class="zones-grid">
+        <div class="zone-card">
+          <h3>Z1</h3>
+          <p data-i18n="zone_state">Estado: </p><span id="z1-state">OFF</span>
+          <div class="zone-actions">
+            <button id="z1-on" class="primary-btn" data-i18n="btn_on">Encender</button>
+            <button id="z1-off" class="secondary-btn" data-i18n="btn_off">Apagar</button>
+          </div>
+        </div>
+        <div class="zone-card">
+          <h3>Z2</h3>
+          <p data-i18n="zone_state">Estado: </p><span id="z2-state">OFF</span>
+          <div class="zone-actions">
+            <button id="z2-on" class="primary-btn" data-i18n="btn_on">Encender</button>
+            <button id="z2-off" class="secondary-btn" data-i18n="btn_off">Apagar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-logs" class="tab-content">
+      <h2 data-i18n="logs_title">Registros</h2>
+      <div id="logs-container" class="logs"></div>
+    </section>
+
+    <section id="tab-config" class="tab-content">
+      <h2 data-i18n="config_title">Configuración</h2>
+      <div class="config-grid">
+        <div class="config-card">
+          <h3 data-i18n="config_hum">Umbrales de humedad</h3>
+          <label>Min: <input type="number" id="hum-min" value="30" /></label>
+          <label>Max: <input type="number" id="hum-max" value="40" /></label>
+          <button id="save-hum" class="primary-btn" data-i18n="btn_save">Guardar</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="login-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2 data-i18n="login_title">Iniciar sesión</h2>
+      <label data-i18n="login_user">Usuario</label>
+      <input type="text" id="login-user" />
+      <label data-i18n="login_pass">Contraseña</label>
+      <input type="password" id="login-pass" />
+      <div class="modal-actions">
+        <button id="login-cancel" class="secondary-btn" data-i18n="btn_cancel">Cancelar</button>
+        <button id="login-ok" class="primary-btn" data-i18n="btn_login">Entrar</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
